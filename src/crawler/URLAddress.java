@@ -56,11 +56,12 @@ public class URLAddress {
 	
 	public static void main(String[] args) throws MalformedURLException, UnknownHostException, IOException
 	{
-            EscalonadorSimples escalonadorSimples = new EscalonadorSimples();
+            int numDeThreads = 100;  
+            EscalonadorSimples escalonadorSimples = new EscalonadorSimples(numDeThreads);
             escalonadorSimples.adicionaNovaPagina( new URLAddress("www.zerozero.pt", 0));
             escalonadorSimples.adicionaNovaPagina( new URLAddress("terra.com.br", 0));
             escalonadorSimples.adicionaNovaPagina( new URLAddress("www.forbes.com", 0));
-            int numDeThreads = 1;             
+                       
             for(int i = 0; i < numDeThreads; i++){            
                 PageFetcher pageFetcher = new PageFetcher(escalonadorSimples);
                 Thread t1 = new Thread(pageFetcher);

@@ -16,14 +16,19 @@ import com.trigonic.jrobotx.RobotExclusion;
 
 import crawler.Servidor;
 import crawler.URLAddress;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EscalonadorSimples implements Escalonador{
     
-        private static int PROFUNDIDADE_MAXIMA = 5;
-        private static int MAXIMO_DE_PAGINAS = 20;
+        private static int PROFUNDIDADE_MAXIMA = 4;
+        private static int MAXIMO_DE_PAGINAS = 500;
 
         private int numeroDePaginasColetadas = 0;
     
@@ -32,6 +37,15 @@ public class EscalonadorSimples implements Escalonador{
         HashMap<Servidor, Record> listaDeRecords = new HashMap();
         List<String> urlColetadas = new ArrayList();
 
+        private long horaDeInicio = 0 ;
+        int numDeThreads;
+        
+        public EscalonadorSimples(int numDeThreads) {
+           horaDeInicio = System.currentTimeMillis();  
+           this.numDeThreads = numDeThreads;
+        }
+
+        
 	@Override
 	public synchronized URLAddress getURL() {            
             while(! this.filaDePaginas.isEmpty()){
@@ -89,10 +103,19 @@ public class EscalonadorSimples implements Escalonador{
 	public boolean finalizouColeta() {
             if(numeroDePaginasColetadas >= MAXIMO_DE_PAGINAS)
             {
-                for(String urlColetada : this.getUrlColetadas())
-                {
-                    System.out.println(urlColetada);
-                }
+                FileWriter myWriter;
+                try {               
+                    myWriter = new FileWriter("resultadoCom" + numDeThreads + "Threads.txt");
+                    myWriter.write("Numero de Threads: " + this.numDeThreads + "\n");
+                    myWriter.append("Tempo total de coleta(s): " + (System.currentTimeMillis() - this.horaDeInicio)/1000 + "\n\n");
+                    for(String urlColetada : this.getUrlColetadas())
+                    {
+                        myWriter.append(urlColetada +"\n");
+                    }
+                    myWriter.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(EscalonadorSimples.class.getName()).log(Level.SEVERE, null, ex);
+                }                                
                 return true;
             }
             return false;
