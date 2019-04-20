@@ -42,10 +42,22 @@ public class PageFetcher implements Runnable{
         TagNode[] anchorNodes = node.getElementsByName("a", true);
         ArrayList<URLAddress> urls = new ArrayList();
         for (TagNode anchorNode : anchorNodes) {            
-            String link = anchorNode.getAttributeByName("href");
-            if(link != null && link.startsWith("/"))
+            String link = anchorNode.getAttributeByName("href");            
+            if(link != null && !link.contains(".php"))
             {
-                urls.add(new URLAddress(ConvertToAbsoluteUrl(urlAddr.getDomain(), link), urlAddr.getDepth() + 1));
+                URLAddress newURL = new URLAddress(link, urlAddr.getDepth() + 1); 
+                if(! newURL.getDomain().isEmpty())
+                {
+                    if(newURL.getDomain().equals(urlAddr.getDomain()))
+                    {
+                        urls.add(new URLAddress(ConvertToAbsoluteUrl(urlAddr.getDomain(), newURL.getAddress()), urlAddr.getDepth() + 1));
+                    }
+                    else
+                    {
+                        urls.add(newURL);
+                    }
+                }
+                
             }
         }
         return urls;
@@ -90,24 +102,34 @@ public class PageFetcher implements Runnable{
                     Thread.sleep(1000);
                     urlAdd = escalonador.getURL();                    
                 }
-                Record record = escalonador.getRecordAllowRobots(urlAdd);
-                if(record == null) {
-                    record = getRecord(urlAdd);
-                    if(record == null)
-                        continue;
-                    escalonador.putRecorded(urlAdd.getDomain(), record);
+                //o Record é a classe do jrobotx que possui o robots.txt em forma de um objeto java
+                Record record = escalonador.getRecordAllowRobots(urlAdd); //verifica se já existe um Record para a url
+                if(record == null) { 
+                    record = getRecord(urlAdd); //usa a API jrobotx para obter o record 
+                    if(record == null) //sem lei
+                    {
+                        ArrayList<URLAddress> result = this.coletaLinksHtml(urlAdd);
+                        if(result != null && result.size() > 0)
+                            this.AddUrlsDescobertas(result, urlAdd);
+                    }
+                    else
+                    {
+                        escalonador.putRecorded(urlAdd.getDomain(), record);
+                    }                    
                 }
-                if(record.allows(urlAdd.getPath()))
+                if(record != null && record.allows(urlAdd.getPath()))
                 {
-                    this.AddUrlsDescobertas(this.coletaLinksHtml(urlAdd), urlAdd);
+                    ArrayList<URLAddress> result = this.coletaLinksHtml(urlAdd);
+                    if(result != null && result.size() > 0)
+                        this.AddUrlsDescobertas(result, urlAdd);
                 }
             } 
             catch (MalformedURLException ex) {
-                Logger.getLogger(PageFetcher.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(PageFetcher.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(PageFetcher.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(PageFetcher.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
-                Logger.getLogger(PageFetcher.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(PageFetcher.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

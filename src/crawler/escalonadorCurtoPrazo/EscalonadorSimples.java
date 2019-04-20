@@ -23,13 +23,14 @@ import java.util.logging.Logger;
 public class EscalonadorSimples implements Escalonador{
     
         private static int PROFUNDIDADE_MAXIMA = 5;
-        private static int MAXIMO_DE_PAGINAS = 50;
+        private static int MAXIMO_DE_PAGINAS = 20;
 
         private int numeroDePaginasColetadas = 0;
     
         LinkedHashMap<Servidor, ArrayList<URLAddress>> filaDePaginas = new LinkedHashMap();
         HashSet<String> urlsConhecidas =  new HashSet();
         HashMap<Servidor, Record> listaDeRecords = new HashMap();
+        List<String> urlColetadas = new ArrayList();
 
 	@Override
 	public synchronized URLAddress getURL() {            
@@ -37,11 +38,13 @@ public class EscalonadorSimples implements Escalonador{
                 for (Servidor serv : filaDePaginas.keySet()) {
                     if(serv.isAccessible())
                     {
-                        URLAddress urlAddress =  filaDePaginas.get(serv).get(0);
+                        URLAddress urlAddress =  filaDePaginas.get(serv).get(0);                        
                         filaDePaginas.get(serv).remove(0);
+                        countFetchedPage();
                         serv.acessadoAgora();
                         if(filaDePaginas.get(serv).isEmpty())
                             filaDePaginas.remove(serv);
+                        urlColetadas.add(urlAddress.getAddress());
                        return urlAddress;
                     }
 
@@ -84,12 +87,25 @@ public class EscalonadorSimples implements Escalonador{
 	}
 	@Override
 	public boolean finalizouColeta() {
-            return numeroDePaginasColetadas >= MAXIMO_DE_PAGINAS;
+            if(numeroDePaginasColetadas >= MAXIMO_DE_PAGINAS)
+            {
+                for(String urlColetada : this.getUrlColetadas())
+                {
+                    System.out.println(urlColetada);
+                }
+                return true;
+            }
+            return false;
 	}
 
 	@Override
 	public void countFetchedPage() {
             numeroDePaginasColetadas++;
 	}
+
+    public List<String> getUrlColetadas() {
+        return urlColetadas;
+    }
 	
+        
 }
