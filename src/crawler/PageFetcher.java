@@ -117,7 +117,7 @@ public class PageFetcher implements Runnable{
                         escalonador.putRecorded(urlAdd.getDomain(), record);
                     }                    
                 }
-                if(record != null && record.allows(urlAdd.getPath()))
+                else if(record.allows(urlAdd.getPath()))
                 {
                     ArrayList<URLAddress> result = this.coletaLinksHtml(urlAdd);
                     if(result != null && result.size() > 0)
