@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>About asyrobot</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- CSS    .-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+
+<style>
+    body {
+        font-family: montserrat;
+    }
+    h3 {
+        color: #aaa;
+    }
+
+    p, li {
+        font-size: 17px;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Asyrobot</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h1>Sobre o Asyrobot</h1>
+            <h3>Asyrobot, um coletor web simples e respeitoso</h3>
+            <p>
+                O Asyrobot é um coletor web 100% brasileiro criado para a disciplina de Recuperação de Informação
+                do Centro Federal de Educação Tecnológica de Minas Gerais (CEFET-MG). Sua criação foi realizada
+                pelos alunos <strong>André Borges (A)</strong>, <strong>Silvia Fonseca (S)</strong> e <strong>Yulli Dias (Y)</strong>
+                com os ensinamentos do maravilhoso, talentoso e benevolente professor <strong>Daniel Hassan</strong>.  
+            </p>
+
+            <p>
+                No estado atual do coletor, o mesmo somente realiza a coleta das urls percorridas ao longo da execução. Como sementes
+                de busca são utilizados os sites:
+                <ul>
+                    <li><a href="www.zerozero.pt">www.zerozero.pt</a></li>
+                    <li><a href="www.forbes.com">www.forbes.com</a></li>
+                    <li><a href="terra.com.br">terra.com.br</a></li>
+                </ul>
+            </p>
+            <h2>Critérios de Coleta</h2>
+            <p>
+                O Asyrobot respeita 3 classes de critérios principais na coleta de páginas web:
+                <ol>
+                    <li>Critérios definidos ao robots.txt dos servidores onde a busca é realizada</li>
+                    <li>
+                        Critérios definidos nas metatags das páginas, não coletando em caso de tag <i>noindex</i> parando a coleta no servidor no caso
+                        da tag <i>nofollow</i><div class=""></div>
+                    </li>
+                    <li>Critério de intervalo de busca no mesmo servidor, evitando coletas consecutivas no mesmo <i>host</i> em intervalo menor que 30 segundos.</li>
+                </ol>
+            </p>
+
+            <h2>Datas das Coletas Realizadas</h2>
+            <p>
+                As coletas realizadas pelo Asyrobot ocorreram no período de <strong>07 de abril de 2019</strong> a <strong>27 de abril de 2019</strong>.
+            </p>
+            
+            <h2>Contate-nos</h2>
+            <p>
+                Em caso de dúvidas, favor entrar em contato no seguinte email: <a href="mailto:asyrobot@cefetmg.com.br">asyrobot@cefetmg.com.br</a>.
+            </p>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
