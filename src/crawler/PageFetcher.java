@@ -30,7 +30,7 @@ public class PageFetcher implements Runnable{
     String robotName;
     
     public PageFetcher(Escalonador escalonador) {
-        this.robotName = "robot";
+        this.robotName = "aayrobot";
         this.escalonador = escalonador;
     }
 
